@@ -1671,7 +1671,7 @@ void rtl8723be_disable_interrupt(struct ieee80211_hw *hw)
 	rtl_write_dword(rtlpriv, REG_HIMR, IMR_DISABLED);
 	rtl_write_dword(rtlpriv, REG_HIMRE, IMR_DISABLED);
 	rtlpci->irq_enabled = false;
-	/*synchronize_irq(rtlpci->pdev->irq);*/
+	synchronize_irq(rtlpci->pdev->irq);
 }
 
 void rtl8723be_card_disable(struct ieee80211_hw *hw)

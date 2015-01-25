@@ -60,43 +60,40 @@ EXPORT_SYMBOL(rtl_addr_delay);
 void rtl_rfreg_delay(struct ieee80211_hw *hw, enum radio_path rfpath, u32 addr,
 		     u32 mask, u32 data)
 {
-	if (addr == 0xfe) {
-		mdelay(50);
-	} else if (addr == 0xfd) {
-		mdelay(5);
-	} else if (addr == 0xfc) {
-		mdelay(1);
-	} else if (addr == 0xfb) {
-		udelay(50);
-	} else if (addr == 0xfa) {
-		udelay(5);
-	} else if (addr == 0xf9) {
-		udelay(1);
-	} else {
-		rtl_set_rfreg(hw, rfpath, addr, mask, data);
-		udelay(1);
-	}
+  switch(addr){
+  case 0xfa:
+  case 0xfc:
+    udelay(5);
+    break;
+  case 0xfe:
+  case 0xfb:
+    udelay(50);
+    break;
+  default:
+    udelay(1);
+    break;
+  }
+
 }
 EXPORT_SYMBOL(rtl_rfreg_delay);
 
 void rtl_bb_delay(struct ieee80211_hw *hw, u32 addr, u32 data)
 {
-	if (addr == 0xfe) {
-		mdelay(50);
-	} else if (addr == 0xfd) {
-		mdelay(5);
-	} else if (addr == 0xfc) {
-		mdelay(1);
-	} else if (addr == 0xfb) {
-		udelay(50);
-	} else if (addr == 0xfa) {
-		udelay(5);
-	} else if (addr == 0xf9) {
-		udelay(1);
-	} else {
-		rtl_set_bbreg(hw, addr, MASKDWORD, data);
-		udelay(1);
-	}
+  switch(addr){
+  case 0xfe:
+  case 0xfb:
+    udelay(50);
+    break;
+  case 0xfd:
+  case 0xfa:
+    udelay(5);
+    break;
+  default:
+    udelay(1);
+    break;
+
+
+  }
 }
 EXPORT_SYMBOL(rtl_bb_delay);
 
@@ -1370,10 +1367,10 @@ static void rtl_op_sta_notify(struct ieee80211_hw *hw,
 {
 	switch (cmd) {
 	case STA_NOTIFY_SLEEP:
+	  printk(KERN_INFO "rtlwifi entering sleep");
 		break;
 	case STA_NOTIFY_AWAKE:
-		break;
-	default:
+	  printk(KERN_INFO "rtlwifi awake");
 		break;
 	}
 }
